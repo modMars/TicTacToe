@@ -1,0 +1,25 @@
+.container{
+    resize: both;
+    display: grid;
+    width: 800px;
+    height: 800px;
+    background: #ddd;
+    grid-template: repeat(3, minmax(150px, 1fr)) / repeat(3, minmax(150px, 1fr));
+    justify-items: center;
+    align-items: center;
+}   
+
+.gameBoardSquare {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border: solid 2px #aaa;
+    color: green;
+    font-size: 80px;
+}
+
+.disable{
+    pointer-events: none; 
+}
