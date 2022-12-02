@@ -6,8 +6,8 @@ const suich = document.querySelector(".suich");
 start.addEventListener("click", (e) => {
   let saveName = prompt("Please type your name!");
   const player = Player(saveName);
-  const { name } = player;
-  console.log(player.name);
+  const CPU = Player("CPU");
+  displayRefresher();
 });
 
 const gameBoard = (() => {
@@ -32,14 +32,15 @@ const gameBoard = (() => {
     const XWins = (cell) => cell === "X";
     const OWins = (cell) => cell === "O";
     const Tie = (cell) => cell != "";
+    const display = document.querySelector(".display__Score");
     for (let i = 0; i < winChecks.length; i++) {
       if (winChecks[i].every(XWins)) {
         winner = "X";
-        console.log(`Winner: ${winner}`);
+        display.textContent = `Winner: ${winner}`;
         container.className += " disable";
       } else if (winChecks[i].every(OWins)) {
         winner = "O";
-        console.log(`Winner: ${winner}`);
+        display.textContent = `Winner: ${winner}`;
         container.className += " disable";
       } else if (
         board[0].every(Tie) &&
@@ -47,7 +48,7 @@ const gameBoard = (() => {
         board[2].every(Tie)
       ) {
         winner = "Tie";
-        console.log(`Winner: ${winner}`);
+        display.textContent = `Winner: ${winner}`;
         container.className += " disable";
       }
     }
@@ -61,9 +62,6 @@ const displayRefresher = () => {
   let row = 0;
   let column = 0;
   const { board } = gameBoard;
-  suich.addEventListener("click", (e) => {
-    suich.toggleAttribute("");
-  });
   board.forEach((e) => {
     e.forEach((e) => {
       const div = document.createElement("div");
@@ -95,8 +93,6 @@ const displayRefresher = () => {
     });
   });
 };
-
-displayRefresher();
 
 const Player = (name) => {
   this.name = name;

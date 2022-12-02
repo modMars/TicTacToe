@@ -6,18 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="app.js" defer></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="normalize.css">
     <title>Tic Tac Toe</title>
 </head>
 <body>
     <header>
         <nav>
-
+            <h1>Tic # Tac # Toe!</h1>
+            <h2>Github</h2>
         </nav>
     </header>
-    <main>
-        <div class="display">Display</div>
-        <div class="container">
-        </div>
+    <main class="wrapper">
+        <section class="display__Score">
+            <span>Player: </span>
+            <span>CPU: </span>
+        </section>
+        <section class="container">
+            <!-- GameBoard goes here! -->
+        </section>
         <button class="start">Start</button>
         <button class="restart">Restart</button>
         <button class="suich o">switch</button>
