@@ -17,7 +17,6 @@ html{
 nav{
     display: flex;
     justify-content:space-evenly;
-    margin-bottom: 200px; 
 }
 
 .wrapper{
@@ -25,6 +24,7 @@ nav{
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    height: 90vh;
 }
 
 
@@ -33,7 +33,7 @@ nav{
     /* min-width: 50%;
     min-height: 50%; */
     background: var(--foreground);
-    grid-template: repeat(3, minmax(100px, 1fr)) / repeat(3, minmax(100px, 1fr));
+    grid-template: repeat(3, minmax(200px, 1fr)) / repeat(3, minmax(200px, 1fr));
     justify-items: center;
     align-items: center;
     border-radius: 5px;
