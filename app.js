@@ -1,24 +1,11 @@
 const container = document.querySelector(".container ");
 const start = document.querySelector(".start");
 const restart = document.querySelector(".restart");
-const suich = document.querySelector(".suich");
+const swap = document.querySelector(".swap");
 
-start.addEventListener("click", (e) => {
-  let saveName = prompt("Please type your name!");
-  const player = Player(saveName);
-  const CPU = Player("CPU");
-  start.className = "start disable";
-  gameBoard.boardSetter();
-});
-
-restart.addEventListener("click", (e) => {
-  displayManager.clearBoard();
-  container.className = "container";
-  start.className = "start";
-});
-
-suich.addEventListener("click", (e) => {
-  console.table(gameBoard.board);
+swap.addEventListener("click", (e) => {
+  if (swap.className == "swap x") swap.className = "swap o";
+  else if (swap.className == "swap o") swap.className = "swap x";
 });
 
 /* gameBoard module, it's basically a factory function that calls itself at the end of it's definition, later on i can call any method i created within the gameBoard factory by just writing gameBoard.method();. */
@@ -41,16 +28,22 @@ const gameBoard = (() => {
         div.className = "gameBoardSquare";
         div.textContent = e;
         div.addEventListener("click", (e) => {
-          if (board[e.target.dataset.row][e.target.dataset.column] == "") {
+          if (
+            board[e.target.dataset.row][e.target.dataset.column] == "" &&
+            swap.className == "swap x"
+          ) {
             e.target.textContent = "X";
             board[e.target.dataset.row][e.target.dataset.column] = "X";
             gameFlow.winCheck();
+            if (container.className != "container disable") gameFlow.cpuMove();
           } else if (
-            board[e.target.dataset.row][e.target.dataset.column] == ""
+            board[e.target.dataset.row][e.target.dataset.column] == "" &&
+            swap.className == "swap o"
           ) {
             e.target.textContent = "O";
             board[e.target.dataset.row][e.target.dataset.column] = "O";
             gameFlow.winCheck();
+            if (container.className != "container disable") gameFlow.cpuMove();
           }
         });
         container.appendChild(div);
@@ -67,11 +60,45 @@ const gameBoard = (() => {
 })();
 
 const gameFlow = (() => {
+  const startMatch = () => {
+    let saveName = prompt("Please type your name!");
+    const player = Player(saveName);
+    const CPU = Player("CPU");
+    start.className = "start disable";
+    gameBoard.boardSetter();
+  };
+
+  const restartMatch = () => {
+    displayManager.clearBoard();
+    container.className = "container";
+    start.className = "start";
+  };
+  //#TODO
+  const cpuMove = (playerCPU) => {
+    const findCell = () => {
+      const gameBoardSquare = document.querySelectorAll(".gameBoardSquare");
+      gameBoardSquare.forEach((e) => {
+        if (e.dataset.row == randomRow && e.dataset.column == randomColumn) {
+          e.textContent = "O";
+        }
+      });
+    };
+
+    let randomRow = Math.floor(Math.random() * 3);
+    let randomColumn = Math.floor(Math.random() * 3);
+    console.log(randomRow, randomColumn);
+    console.log(gameBoard.board[randomRow][randomColumn]);
+    if (gameBoard.board[randomRow][randomColumn] == "") {
+      gameBoard.board[randomRow][randomColumn] = "O";
+      findCell();
+      gameFlow.winCheck();
+    } else cpuMove();
+  };
+
   const winCheck = () => {
     let { board } = gameBoard;
     // Define the winner variable.
     let winner = "none";
-    console.log(winner);
     /* the winChecks array consists of a multidimensional array containing every possible win condition in Tic Tac Toe. */
     let winChecks = [
       [board[0][0], board[0][1], board[0][2]],
@@ -94,13 +121,11 @@ const gameFlow = (() => {
     for (let i = 0; i < winChecks.length; i++) {
       if (winChecks[i].every(XWins)) {
         winner = "X";
-        display.textContent = `Winner: ${winner}`;
         container.className = "container disable";
         console.log("winner x");
         console.table(gameBoard.board);
       } else if (winChecks[i].every(OWins)) {
         winner = "O";
-        display.textContent = `Winner: ${winner}`;
         container.className = "container disable";
         console.log("winner o");
         console.table(gameBoard.board);
@@ -111,14 +136,13 @@ const gameFlow = (() => {
       ) {
         winner = "Tie";
         console.log("tie");
-        display.textContent = `Winner: ${winner}`;
         container.className = "container disable";
       }
     }
     return winner;
   };
 
-  return { winCheck };
+  return { winCheck, startMatch, restartMatch, cpuMove };
 })();
 
 const displayManager = (() => {
@@ -132,7 +156,6 @@ const displayManager = (() => {
       container.removeChild(container.firstChild);
     }
   };
-
   return { clearBoard };
 })();
 
@@ -142,6 +165,17 @@ const Player = (name) => {
   const sayMyScore = () => console.log(score);
   const editScore = (newScore) => (score = newScore);
   const sayMyName = () => console.log(name);
+  const XorO = (e) => {
+    if (swap.className == "swap x") return "o";
+    else if (swap.className == "swap o") return "x";
+  };
+  const editXorO = () => {
+    if (swap.className == "swap x") swap.className == "swap o";
+    else swap.className == "swap o";
+  };
 
-  return { sayMyName, sayMyScore, editScore, name };
+  return { sayMyName, sayMyScore, editScore, XorO, editXorO, name };
 };
+
+start.addEventListener("click", gameFlow.startMatch);
+restart.addEventListener("click", gameFlow.restartMatch);
