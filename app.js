@@ -75,22 +75,15 @@ const gameFlow = (() => {
   };
   //#TODO
   const cpuMove = (playerCPU) => {
-    const findCell = () => {
-      const gameBoardSquare = document.querySelectorAll(".gameBoardSquare");
-      gameBoardSquare.forEach((e) => {
-        if (e.dataset.row == randomRow && e.dataset.column == randomColumn) {
-          e.textContent = "O";
-        }
-      });
-    };
-
-    let randomRow = Math.floor(Math.random() * 3);
-    let randomColumn = Math.floor(Math.random() * 3);
-    console.log(randomRow, randomColumn);
-    console.log(gameBoard.board[randomRow][randomColumn]);
-    if (gameBoard.board[randomRow][randomColumn] == "") {
-      gameBoard.board[randomRow][randomColumn] = "O";
-      findCell();
+    let gameBoardSquare = document.querySelectorAll(".gameBoardSquare");
+    gameBoardSquare = [...gameBoardSquare].filter((e) => e.textContent == "");
+    let randomIndex = Math.floor(Math.random() * gameBoardSquare.length);
+    console.log(gameBoardSquare[randomIndex]);
+    if (gameBoardSquare[randomIndex].textContent == "") {
+      gameBoardSquare[randomIndex].textContent = "O";
+      gameBoard.board[gameBoardSquare[randomIndex].dataset.row][
+        gameBoardSquare[randomIndex].dataset.column
+      ] = "O";
       gameFlow.winCheck();
     } else cpuMove();
   };
